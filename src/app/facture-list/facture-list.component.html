@@ -1,0 +1,112 @@
+<form
+        id="searchForm"
+        name="searchForm"
+        [formGroup]="searchForm"
+        (submit)="updateFilter()">
+    <div fxLayout="row" fxLayoutAlign="space-around">
+        <div fxflex="100">
+            <mat-form-field>
+                <mat-select (selectionChange)="updateSelect($event.value)" placeholder="Sélectionner une colonne à filtrer">
+                    <mat-option *ngFor="let filter of filters" [value]="filter.value">
+                        {{filter.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxflex="100">
+            <mat-form-field>
+                <mat-select formControlName="filter_status" placeholder="Sélectionner un status à filtrer">
+                    <mat-option *ngFor="let filter of filterStatus" [value]="filter.status">
+                        {{filter.status}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div fxflex="100">
+            <mat-form-field>
+                <input
+                        matInput
+                        id="factureFilter"
+                        type='text'
+                        class="form-control"
+                        formControlName="search_values"
+                        placeholder="Rechercher">
+            </mat-form-field>
+            <input type="submit" value="ok">
+        </div>
+    </div>
+</form>
+
+<div fxlayout="column" style="flex-direction: column; box-sizing: border-box; display: flex;">
+
+    <ngx-datatable
+            class="material ngx-datatable stripped"
+            [loadingIndicator]="loadingIndicator"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [reorderable]="reorderable"
+            [rowClass]="getRowClass"
+            [rows]="factures"
+            [columns]="columns"
+            [selected]="selected"
+            [selectionType]="'checkbox'"
+            (select)='onSelect($event)'
+            [externalPaging]="true"
+            [count]="page.totalElements"
+            [offset]="page.pageNumber"
+            [limit]="page.size"
+            (page)='setPage($event)'>
+
+        <ngx-datatable-column name="Numéro">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ row.numero }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Nom et Prénom">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ row.lname }} {{ row.fname }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Date">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ row.date | date: 'dd/MM/yyyy' }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total de la facture">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ row.unit_price | currency:'EUR'  }}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{ row.status}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Supprimer">
+            <ng-template #date let-row="row" let-value="value" ngx-datatable-cell-template>
+                <button (click)="deleteFacture(row.id)" mat-raised-button color="warn">Supprimer</button>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column  [sortable]="false" [canAutoResize]="false" [draggable]="false" [resizeable]="false">
+
+            <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected" let-selectFn="selectFn">
+                <mat-checkbox class="mat-checkbox mat-accent" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)">
+                </mat-checkbox>
+            </ng-template>
+            <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected" let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <mat-checkbox class="mat-checkbox mat-accent" [checked]="isSelected" (change)="onCheckboxChangeFn($event)">
+                </mat-checkbox>
+            </ng-template>
+        </ngx-datatable-column>
+
+    </ngx-datatable>
+</div>

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FactureListComponent } from './facture-list/facture-list.component';
@@ -30,13 +29,17 @@ import {
     MatDividerModule,
     MatAutocompleteModule,
     MatChipsModule,
-    MatCommonModule, MatTabsModule
+    MatCommonModule, MatTabsModule, MatGridListModule
 } from '@angular/material';
+import { SearchComponent } from './search/search.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
     AppComponent,
-    FactureListComponent
+    FactureListComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +69,9 @@ import {
     MatAutocompleteModule,
     MatChipsModule,
     MatCommonModule,
-    MatTabsModule
+    MatTabsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule
   ],
   providers: [FactureService],
   bootstrap: [AppComponent]
